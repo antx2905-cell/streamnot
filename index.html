@@ -6,7 +6,8 @@
 </head><body><div id="m"></div>
 <script>
 /* StreamNot · página puente para TikTok LIVE Studio
-   Uso: https://.../streamnot/#perfil/overlay   (opcional @puerto, ej. #yo/alerts@8788)
+   Uso: https://.../streamnot/#perfil/overlay   (opcional @puerto, ej. #yo/alerts@8788;
+   y un modo: #yo/lives/sinvidas)
    LIVE Studio solo acepta enlaces públicos. Esta página es pública y,
    ya dentro de LIVE Studio, abre el overlay que StreamNot sirve en tu PC. */
 (function () {
@@ -14,11 +15,12 @@
   var port = 8787, m = h.match(/@(\d+)$/);
   if (m) { port = +m[1]; h = h.replace(/@\d+$/, ''); }
   var parts = h.split('/').filter(Boolean);
-  if (parts.length !== 2 || !/^[\w-]+$/.test(parts[0]) || !/^[\w-]+$/.test(parts[1])) {
+  // opcional: 3a parte = modo dentro del overlay (ej. #yo/lives/sinvidas)
+  if ((parts.length !== 2 && parts.length !== 3) || !parts.every(function (x) { return /^[\w-]+$/.test(x); })) {
     var el = document.getElementById('m'); el.textContent = 'StreamNot: copia el enlace desde la app.'; el.style.display = 'block'; return;
   }
   var base = 'http://127.0.0.1:' + port;
-  var target = base + '/o/' + parts[0] + '/' + parts[1];
+  var target = base + '/o/' + parts[0] + '/' + parts[1] + (parts[2] ? '#' + parts[2] : '');
   var tries = 0;
   function probe() {
     var img = new Image();
